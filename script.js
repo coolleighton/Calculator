@@ -31,7 +31,9 @@ let displayTop = ""
 let displayBot = ""
 let firstNumber = ""
 let secondNumber = ""
+let displayOperation = ""
 let operation = ""
+let answer = ""
 
 
 // Number input event listeners  // 
@@ -77,7 +79,7 @@ zeroBtn.addEventListener("click", function() {
 })
 
 decimalBtn.addEventListener("click", function() {
-    placeNumber(".")
+    placedecimal()
 })
 
 
@@ -111,26 +113,41 @@ deleteBtn.addEventListener("click", function() {
     deleteCurrentInput()
 })
 
-
-// function to clear all numbers and operations then update DOM // 
-
-function clearCalculator() {
-    firstNumber = ""
-    secondNumber = ""
-    operation = ""
-    updateScreen()
-}
+equalsBtn.addEventListener("click", function() {
+    if (firstNumber && operation && secondNumber) {
+        evaluateInput()
+    }
+})
 
 
-// function to determine if number selected is first or second and update DOM // 
+// functions to determine if a number or decimal selected is first or second and update DOM // 
 
 function placeNumber(number) {
+
     if (!operation) {
         firstNumber += number
     }
     else {
         secondNumber += number
     }
+
+    updateScreen()
+}
+
+function placedecimal() {
+
+    if (!operation) {
+        if (!firstNumber.includes(".")) {
+
+            firstNumber += "."
+        }
+        }
+    else if (operation) {
+        if (!secondNumber.includes(".")) {
+                secondNumber += "."
+        }
+    }
+
     updateScreen()
 }
 
@@ -138,8 +155,25 @@ function placeNumber(number) {
 // function to determine operation and update DOM // 
 
 function placeOperation(operator) {
+
     if (firstNumber) {
-        operation = operator
+
+        if (operator === "*") {
+            displayOperation = "x"
+            operation = operator
+        }
+
+        else if (operator === "/") {
+            displayOperation = "÷"
+            operation = operator
+        }
+
+        else {
+            displayOperation = operator
+            operation = operator
+
+        }
+
         updateScreen()
     }
 }
@@ -148,22 +182,71 @@ function placeOperation(operator) {
 // function to clear numbers one at a time and update DOM //
 
 function deleteCurrentInput() {
+
     if (secondNumber) {
         secondNumber = secondNumber.slice(0, -1)
     }
-    else if (operation) {
+    else if (displayOperation) {
         operation = ""
+        displayOperation = ""
     }
     else if (firstNumber) {
         firstNumber = firstNumber.slice(0, -1)
     }
+
     updateScreen()
+}
+
+
+// function to clear all numbers and operations then update DOM // 
+
+function clearCalculator() {
+    
+    firstNumber = ""
+    secondNumber = ""
+    operation = ""
+    displayOperation = ""
+    answer = ""
+
+    updateScreen()
+}
+
+
+// function to evaluate input // 
+
+function evaluateInput () {
+
+    firstNumber = parseInt(firstNumber)
+    secondNumber = parseInt(secondNumber)
+    
+    if (operation === "+") {
+        answer = firstNumber + secondNumber
+    }
+    else if (operation === "-") {
+        answer = firstNumber - secondNumber
+    }
+    else if (operation === "*") {
+        answer = firstNumber * secondNumber
+    }
+    else if (operation === "/") {
+        answer = firstNumber / secondNumber
+    }
+    else if (operation === "%") {
+        answer = (firstNumber / secondNumber) * 100 + "%"
+    }
+
+    firstNumber = firstNumber.toString()
+    secondNumber = secondNumber.toString()
+
+    updateScreen()
+
 }
 
 
 // function to update screen // 
 
 function updateScreen() {
-    topText.textContent = `${firstNumber} ${operation} ${secondNumber}`
+    topText.textContent = `${firstNumber} ${displayOperation} ${secondNumber}`
+    botText.textContent = answer
 }
 
