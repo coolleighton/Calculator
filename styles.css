@@ -5,6 +5,7 @@
 }
 
 body {
+    position: relative;
     background-color: #045D58;
     margin: 0;
 }
@@ -93,4 +94,15 @@ body {
 #zero:hover,
 #decimal:hover {
     background-color: #64c0b4;
+}
+
+.git-link {
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    text-align: center;
+    position: absolute;
+    font-size: 20px;
+    bottom: -150px;
+    left: 30%;
+    right: 30%;
 }
